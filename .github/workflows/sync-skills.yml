@@ -1,0 +1,41 @@
+name: sync-skills
+
+# Regenerate the need-named skill variants from the canonical, live
+# https://riffkit.ai/SKILL.md (the single source of truth, served from the
+# Riffkit app). The renderer fetches it over HTTP — this repo stores no copy of
+# the canonical skill, and deliberately has no SKILL.md at its root: the skills
+# CLI stops at a root SKILL.md and never scans subdirectories, which would hide
+# every variant from default discovery.
+
+on:
+  schedule:
+    - cron: "10 6 * * *" # daily ~06:10 UTC, just after riffkit/skill's own sync
+  workflow_dispatch: {} # manual "Run workflow" button (e.g. right after a deploy)
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Render variants from the live skill
+        # Fetches SKILL.md + HEARTBEAT.md from riffkit.ai and writes one
+        # <name>/SKILL.md per entry in variants.json. Edit variants.json (naming)
+        # or the canonical skill (body) — never a generated file.
+        run: python3 scripts/render_variants.py
+      - name: Commit if changed
+        run: |
+          git config user.name "riffkit-bot"
+          git config user.email "bot@riffkit.ai"
+          # -A so newly rendered variant dirs (untracked) and pruned ones both
+          # register; the staged diff is what decides whether there's anything
+          # to push (plain `git diff` is blind to untracked files).
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: regenerate skill variants from riffkit.ai/SKILL.md"
+            git push
+          else
+            echo "Already up to date."
+          fi
