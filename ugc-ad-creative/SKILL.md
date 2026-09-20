@@ -1,7 +1,7 @@
 ---
 name: ugc-ad-creative
 description: "Make a UGC-style ad for your product from a TikTok that already won. Give one source (a TikTok link, an uploaded video, or an analyzed template), pick your product and optionally a locked character, and the backend riffs the source's emotion formula into a post-ready ad creative in 9 languages. You riff the formula, not the video. Triggers: 'make an ad', 'make an ad creative', 'a UGC ad for my product', 'TikTok ad for my product', 'make a video ad for my store', 'ad creative from this viral video'."
-version: "1.7.0"
+version: "1.7.1"
 updated_at: "2026-09-19"
 source_url: "https://riffkit.ai/SKILL.md"
 homepage: "https://riffkit.ai"
@@ -370,7 +370,7 @@ No auth, and no body required. `client` (optional, `^[a-z0-9][a-z0-9-]{0,63}$`) 
 | Param | Type | Notes |
 |------|------|------|
 | `video` | File | Upload source video (≤100MB, and ≤ the render-duration cap — default 45s; see General constraints) |
-| `tiktok_url` | string | TikTok link (server downloads + extracts BGM). Must point at **one specific video** — `…/@user/video/<id>` (query params fine) or a `vm.`/`vt.`/`tiktok.com/t/` share short link. A profile-page link (`tiktok.com/@handle`, no `/video/`) is rejected with an instant 400 |
+| `tiktok_url` | string | TikTok link (server downloads + extracts BGM). Must point at **one specific video** — `…/@user/video/<id>` (query params fine) or a `vm.`/`vt.`/`tiktok.com/t/` share short link. A profile-page link (`tiktok.com/@handle`, no `/video/`) is rejected with an instant 400, and so is a video longer than the render-duration cap (read from the link's metadata before anything downloads) |
 | `formula_id` | string | Analyzed template ID (yours or a public one; status must be `analyzed`, else 400) |
 
 **Optional creative config:**
@@ -501,7 +501,7 @@ The second generation mode: no source video, no template — the **creative dire
 
 Turn a **new** source into the caller's own template **without generating a video** — for building a template library ahead of time. **Subscriber-only**: callers without an active subscription get `403`; they should riff instead (`POST /api/riffs`, which is paid per generated video). Subscribers are additionally volume-capped by the same margin-tied free-cost guard that protects all no-generation analysis, so heavy standalone analyzing without ever generating eventually returns `429`.
 
-**Request (multipart/form-data):** exactly one source — `tiktok_url` (a TikTok **video** link) **or** `video` (upload, ≤100MB, ≤ render cap) — plus optional `user_hint` (where the hook/payoff is) and `name`. **Response:** `{task_id, status: "queued"}`; poll `GET /api/tasks/{task_id}`. On completion the new template appears in `GET /api/formulas` (the caller's own, `status` transitions `analyzing`→`analyzed`). Unlike `POST /api/riffs`, this **never chains generation** — it only analyzes.
+**Request (multipart/form-data):** exactly one source — `tiktok_url` (a TikTok **video** link, ≤ render cap) **or** `video` (upload, ≤100MB, ≤ render cap); either one over the cap gets an instant 400 and nothing is created — plus optional `user_hint` (where the hook/payoff is) and `name`. **Response:** `{task_id, status: "queued"}`; poll `GET /api/tasks/{task_id}`. On completion the new template appears in `GET /api/formulas` (the caller's own, `status` transitions `analyzing`→`analyzed`). Unlike `POST /api/riffs`, this **never chains generation** — it only analyzes.
 
 **When to use:** the user explicitly wants to *bank a template for later* from a new source without spending on a video. For the normal "make me a video" ask, use `POST /api/riffs` — it analyzes and generates in one shot.
 
@@ -833,7 +833,7 @@ List scope members (you must be a member, else 403). Returns `[{id, scope_id, us
 
 | Dimension | Limit | Source |
 |------|------|------|
-| Source video upload | ≤ **100 MB** and ≤ the **render-duration cap** (`max_render_duration`, default **45 s**, runtime-adjustable, ceiling 90s) — the SAME single number that caps the generated video, not a separate limit; over the duration → instant 400 + cleanup | `POST /api/riffs` `video`, `assets/upload` |
+| Source video (upload or TikTok link) | Upload ≤ **100 MB**; both ≤ the **render-duration cap** (`max_render_duration`, default **45 s**, runtime-adjustable, ceiling 90s) — the SAME single number that caps the generated video, not a separate limit; over the duration → instant 400 (uploads are also cleaned up) | `POST /api/riffs` `video`/`tiktok_url`, `POST /api/formulas/analyze`, `assets/upload` |
 | Generated video length | ≤ **max_render_duration** (the same single cap as the source upload above) | engine render budget |
 | Image upload | ≤ **50 MB** each, ≤ **8 images** per product, `.jpg/.jpeg/.png/.webp` | product images |
 | `content_anchor` / `user_hint` | ≤ **5000 chars** | riffs / pipeline/batch |
@@ -898,6 +898,7 @@ queued → running → completed
 | `401` unauthenticated | vee_session expired/missing | Re-run the device flow (`POST /api/skill/device/authorize` → user approves → poll `.../token`); see **Auth** |
 | `402` insufficient_credits | not enough to submit | Show the shortfall in display credits (internal ÷ 100) + relay `topup_url` verbatim, **no retry** |
 | `400` — not exactly one source | missing or multiple sources | Ensure exactly one of `video`/`tiktok_url`/`formula_id` |
+| `400` — source video too long | the uploaded file or the TikTok link runs longer than `max_render_duration` (the message states both numbers) | Ask the user for a shorter video, or to trim it and upload the trimmed file |
 | `400` — TikTok link is not a specific video | `tiktok_url` is a profile page or other non-video link (path lacks `/video/`) | Ask the user for the link of **one video** (contains `/video/`) or a `vm.`/`vt.` share short link |
 | `400` — required missing | name/description etc. not sent | Fill per the field tables; don't paper over with empty strings |
 | `400` — invalid language | a code not in the candidates | First `GET /api/languages` for candidates |
