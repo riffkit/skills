@@ -1,7 +1,7 @@
 ---
 name: ugc-ad-creative
 description: "Make a UGC-style ad for your product from a TikTok that already won. Give one source (a TikTok link, an uploaded video, or an analyzed template), pick your product and optionally a locked character, and the backend riffs the source's emotion formula into a post-ready ad creative in 9 languages. You riff the formula, not the video. Triggers: 'make an ad', 'make an ad creative', 'a UGC ad for my product', 'TikTok ad for my product', 'make a video ad for my store', 'ad creative from this viral video'."
-version: "1.7.1"
+version: "1.7.2"
 updated_at: "2026-09-19"
 source_url: "https://riffkit.ai/SKILL.md"
 homepage: "https://riffkit.ai"
@@ -423,7 +423,7 @@ No auth, and no body required. `client` (optional, `^[a-z0-9][a-z0-9-]{0,63}$`) 
 
 #### `POST /api/pipeline/backfill` — add ratios to already-delivered videos
 
-Add extra **vertical** aspect ratios to renders you already have, without re-generating from scratch (each new ratio reframes the existing render). **Body (JSON):** `{source_asset_ids: string[], video_ratios: string[]}` (vertical ratios only — a horizontal ratio → 400). Any member of a render family works as the source: a reframed variant's `asset_id` resolves to the family's original master render automatically. **Response:** `{submitted: [{task_id, asset_id, ratio}], skipped: [{asset_id, ratio, reason}], batch_id}`. Skip reasons: `already_occupied` (ratio already delivered or in-flight for that family), `source_not_reframeable` (no reusable render — this also covers a **Seedance 2.5 master longer than 15s**: 2.5 renders ≤30s in one segment but reframes execute on the 2.0 engine whose per-call window is 15s, so long 2.5 masters can't fan out into extra ratios — and submitting multi-ratio on 2.5 with a >15s source is itself a 400 (`seedance25_multi_ratio_over_15s`), so the only route to several ratios at that length is the default engine), `landscape_source` (a `16:9`/`4:3`/`21:9` render can't be reframed — targets are portrait-only and cross-orientation reframe is unsupported; don't submit landscape sources). 402 when the balance can't cover the submitted reframes.
+Add extra **vertical** aspect ratios to renders you already have, without re-generating from scratch (each new ratio reframes the existing render). **Body (JSON):** `{source_asset_ids: string[], video_ratios: string[]}` (vertical ratios only — a horizontal ratio → 400). Any member of a render family works as the source: a reframed variant's `asset_id` resolves to the family's original master render automatically. **Response:** `{submitted: [{task_id, asset_id, ratio}], skipped: [{asset_id, ratio, reason}], batch_id}`. Skip reasons: `already_occupied` (ratio already delivered or in-flight for that family), `source_not_reframeable` (no reusable render on hand), `landscape_source` (a `16:9`/`4:3`/`21:9` render can't be reframed — targets are portrait-only and cross-orientation reframe is unsupported; don't submit landscape sources). 402 when the balance can't cover the submitted reframes.
 
 #### `GET /api/pipeline/backfill/occupied?asset_id=<id>` — ratios already produced
 
