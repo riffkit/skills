@@ -26,7 +26,7 @@ Then just ask, in plain language:
 riff https://www.tiktok.com/@user/video/123 into an ad for my product, in Spanish
 ```
 
-Your agent handles the rest: source → formula → new footage → your product & character → captions, cover, hashtags. Riffkit is hosted, so there's no MCP server, no local GPU, and no models to download — **generating videos needs a [Riffkit account](https://riffkit.ai)**, billed by the second of finished video.
+Your agent handles the rest: source → formula → new footage → your product & character → captions, cover, hashtags. Riffkit is hosted, so there's no local GPU and no models to download (chat assistants such as Claude and ChatGPT connect through the hosted connector at `https://mcp.riffkit.ai/mcp`, [setup](https://riffkit.ai/mcp)) — **generating videos needs a [Riffkit account](https://riffkit.ai)**, billed by the second of finished video.
 
 ## How these files are made
 
