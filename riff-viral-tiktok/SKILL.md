@@ -1,8 +1,8 @@
 ---
 name: riff-viral-tiktok
 description: "Turn a winning TikTok into your own video: same emotion formula, your product, new footage. Paste the link (or upload the video), optionally pick a product, character and language, and the backend rebuilds why it held attention (hook, beat structure, dialogue timing) around your content. You riff the formula, not the video. Triggers: 'riff this video', 'riff this TikTok', 'turn this TikTok into mine', 'remake this viral video with my product', 'recreate this video for my brand'."
-version: "1.9.2"
-updated_at: "2026-10-05"
+version: "1.9.6"
+updated_at: "2026-10-08"
 source_url: "https://riffkit.ai/SKILL.md"
 homepage: "https://riffkit.ai"
 generated_from: "https://riffkit.ai/SKILL.md"
