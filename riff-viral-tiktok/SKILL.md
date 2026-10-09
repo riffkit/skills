@@ -1,8 +1,8 @@
 ---
 name: riff-viral-tiktok
 description: "Turn a winning TikTok into your own video: same emotion formula, your product, new footage. Paste the link (or upload the video), optionally pick a product, character and language, and the backend rebuilds why it held attention (hook, beat structure, dialogue timing) around your content. You riff the formula, not the video. Triggers: 'riff this video', 'riff this TikTok', 'turn this TikTok into mine', 'remake this viral video with my product', 'recreate this video for my brand'."
-version: "1.9.6"
-updated_at: "2026-10-08"
+version: "1.9.7"
+updated_at: "2026-10-09"
 source_url: "https://riffkit.ai/SKILL.md"
 homepage: "https://riffkit.ai"
 generated_from: "https://riffkit.ai/SKILL.md"
@@ -84,6 +84,7 @@ With the CLI, `riffkit wait <batch_id>` does the waiting: it follows the batch f
 A new link or video shows two tasks: the analysis, then the video. Each extra aspect ratio appears as a further task once the first video finishes: the batch is done when every ratio submitted has its video. Queued over 2 minutes: the servers are busy and it starts by itself. A Swap on a Seedance engine first waits for a content review of the source, several minutes the first time. Before you call it done, check that a video came out (see "When something goes wrong").
 
 **9. Delivery.** The finished task's `result` names the video (`asset_id`). Give the user its link from `riffkit get_video_link`, exactly as returned: say how long it works (`seconds_valid`), that anyone who holds it can open the video, that you get a fresh one whenever they ask, and that the video is also in their Riffkit Library.
+On the free plan a finished video carries a small Riffkit watermark in its top-left corner, and the link says so (`watermarked: true`). Say it once when you hand the video over; any plan removes it from every video, the ones already made included.
 To save the file itself: `riffkit download <asset_id>` (over HTTP the file needs the session cookie: references/details.md, "Delivery and files").
 Then, from `riffkit list_videos`: its `caption` and `asset_hashtags` (the post text to publish with it); in a sentence or two, what was kept from the source and what the direction changed; what to try next time. A video made in sections: say which part is ready and, unless held to the first section (step 3), that the rest can be made later on the same script until `staged.finish_by`.
 
