@@ -1,8 +1,8 @@
 ---
 name: ugc-ad-creative
 description: "Make a UGC-style ad for your product from a TikTok that already won. Give one source (a TikTok link, an uploaded video, or an analyzed template), pick your product and optionally a locked character, and the backend riffs the source's emotion formula into a post-ready ad creative in 9 languages. You riff the formula, not the video. Triggers: 'make an ad', 'make an ad creative', 'a UGC ad for my product', 'TikTok ad for my product', 'make a video ad for my store', 'ad creative from this viral video'."
-version: "1.10.5"
-updated_at: "2026-10-20"
+version: "1.10.6"
+updated_at: "2026-10-26"
 source_url: "https://riffkit.ai/SKILL.md"
 homepage: "https://riffkit.ai"
 generated_from: "https://riffkit.ai/SKILL.md"
