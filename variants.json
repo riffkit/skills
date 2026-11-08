@@ -1,4 +1,6 @@
 [
+  {"name": "change-outfit-in-video",
+   "description": "Change the outfit, person, place or product in a short video of your own and keep every shot, cut and beat. Upload the video (or paste a TikTok link), say what to change, and optionally pick a saved character or your product; the backend re-renders it shot for shot as a new AI video. Triggers: 'change the outfit in my video', 'put me in a different outfit', 'swap the person in this video', 'change the background of my video', 'put my product in this video', 'make this video anime style'."},
   {"name": "ugc-ad-creative",
    "description": "Make a UGC-style ad for your product: riff a TikTok that already won (same hook, pacing and beats, new footage), put your product into a video of your own (same shots), or start from a written idea. Pick your product and optionally a saved character, and the backend makes a post-ready ad creative; ads made from a winning TikTok or an idea come in any of 10 languages. Triggers: 'make an ad', 'make an ad creative', 'a UGC ad for my product', 'TikTok ad for my product', 'make a video ad for my store', 'ad creative from this viral video'."},
   {"name": "riff-viral-tiktok",
