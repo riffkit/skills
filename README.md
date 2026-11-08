@@ -32,7 +32,7 @@ Your agent handles the rest: source → formula → new footage → your product
 
 `scripts/render_variants.py` fetches the canonical `SKILL.md` from riffkit.ai and writes one `<name>/SKILL.md` per entry in [`variants.json`](variants.json) — the canonical body verbatim, under the variant's own name and description. A [daily workflow](.github/workflows/sync-skills.yml) reruns it and commits any change.
 
-So: **never edit a generated `<name>/SKILL.md`.** Change [`variants.json`](variants.json) for naming, or the canonical skill for the body. Dropping an entry from `variants.json` deletes its directory on the next run. Each variant's one-click sign-in sends `client=<skill name>`, used only for attribution.
+So: **never edit a generated `<name>/SKILL.md`.** Change [`variants.json`](variants.json) for naming, or the canonical skill for the body. Dropping an entry from `variants.json` deletes its directory on the next run. Without the Riffkit CLI, each variant's one-click sign-in sends `client=<skill name>`, used only for attribution (`riffkit login` labels its sign-ins `cli`).
 
 There is intentionally **no `SKILL.md` at this repo's root** — the skills CLI stops at a root `SKILL.md` and never scans subdirectories, which would hide every variant from default discovery.
 

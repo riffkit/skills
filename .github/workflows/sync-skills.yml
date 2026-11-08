@@ -21,8 +21,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Render variants from the live skill
-        # Fetches SKILL.md + HEARTBEAT.md from riffkit.ai and writes one
-        # <name>/SKILL.md per entry in variants.json. Edit variants.json (naming)
+        # Fetches SKILL.md + HEARTBEAT.md, and the reference files SKILL.json
+        # lists, from riffkit.ai and writes <name>/SKILL.md, HEARTBEAT.md and
+        # references/ per entry in variants.json. Edit variants.json (naming)
         # or the canonical skill (body) — never a generated file.
         run: python3 scripts/render_variants.py
       - name: Commit if changed
