@@ -1,8 +1,8 @@
 ---
 name: change-outfit-in-video
 description: "Change the outfit, person, place or product in a short video of your own and keep every shot, cut and beat. Upload the video (or paste a TikTok link), say what to change, and optionally pick a saved character or your product; the backend re-renders it shot for shot as a new AI video. Triggers: 'change the outfit in my video', 'put me in a different outfit', 'swap the person in this video', 'change the background of my video', 'put my product in this video', 'make this video anime style'."
-version: "1.10.9"
-updated_at: "2026-11-07"
+version: "1.10.10"
+updated_at: "2026-11-14"
 source_url: "https://riffkit.ai/SKILL.md"
 homepage: "https://riffkit.ai"
 generated_from: "https://riffkit.ai/SKILL.md"
